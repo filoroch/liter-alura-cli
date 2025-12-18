@@ -6,6 +6,9 @@ Aplicação de linha de comando em desenvolvimento com Spring Shell, Spring Data
 
 [print da aplicação funcionando]
 
+> [!TIP]
+> O projeto esta seguindo uma abordagem GIT FLOW (develop -> main), alem de ser orientado a TDD: Test Driven Development
+
 ## Tecnologias
 - Spring Framework:
   - Shell
