@@ -1,0 +1,12 @@
+spring:
+  main:
+    banner-mode: off
+    web-application-type: none
+  shell:
+    interactive:
+        enabled: true
+  application:
+    name: liter-alura
+logging:
+  level:
+    root: ERROR
