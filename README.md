@@ -1,10 +1,13 @@
+
 <div align="center">
+
+![banner](src/main/resources/banner.png)
+
+<h1>Liter-Alura</h1>
   
-# liter-alura-cli
 Aplicação de linha de comando em desenvolvimento com Spring Shell, Spring Data JPA e a api do Gunteberg para demonstrar habilidades em desenvolvimento, consumo e armazenamento de dados de APIs
 </div>
 
-[banner](src/main/resources/banner.png)
 
 > [!TIP]
 > O projeto esta seguindo uma abordagem GIT FLOW (develop -> main), alem de ser orientado a TDD: Test Driven Development
@@ -30,6 +33,10 @@ Aplicação de linha de comando em desenvolvimento com Spring Shell, Spring Data
    ```bash
       docker-compose up -d
     ```
+   
+  > [!TIP]
+  > Caso queira, pode configurar um banco local ou usar um supabase, que o resultado sera essencialmente o mesmo
+   
 4. Configure o arquivo application.properties com as credenciais do banco
     - `DB_HOST` = `localhost` no caso do docker. Tambem pode usar um servidor supabase
     - `DB_PORT` = `5432` porta padrao do Postgres
