@@ -14,13 +14,11 @@ import java.net.http.HttpResponse;
 @Service
 public class GutenbergService {
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client;
     private static final String BASE_URL = "http://gutendex.com/books";
 
-    public GutenbergService(
-            HttpClient client
-    ) {
-        this.client = client;
+    public GutenbergService(HttpClient client) {
+        this.client = client.newBuilder().build();
     }
 
     private HttpResponse<String> makeRequest(String url) {

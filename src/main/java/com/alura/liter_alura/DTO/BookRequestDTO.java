@@ -18,6 +18,9 @@ public record BookRequestDTO(
     Set<AuthorRequestDTO> authors,
 
     @JsonAlias
-    Set<Language> languages
+    Set<Language> languages,
+
+    @JsonAlias({"download_count", "downloadCount"})
+    Double downloadCount
 ) {
 }

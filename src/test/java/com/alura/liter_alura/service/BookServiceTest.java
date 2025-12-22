@@ -18,12 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Year;
 import java.util.Collections;
-import java.util.List;
 
 import static com.alura.liter_alura.service.BookService.toBookEntity;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
@@ -139,6 +136,7 @@ class BookServiceTest {
             var authors = books.get("authors");
             var _language = books.get("languages").get(0);
             var language = Language.ENGLISH;
+            var download_count = books.get("download_count").asDouble();
 
             switch (_language.asText()) {
                 case "en" -> language = Language.ENGLISH;
@@ -158,6 +156,7 @@ class BookServiceTest {
                     .title(books.get("title").asText())
                     .authors(Collections.singleton(author))
                     .languages(Collections.singleton(language))
+                    .downloadCount(download_count)
                     .build();
 
            var response = bookService.convertJsonToDTOs(json);
@@ -168,6 +167,7 @@ class BookServiceTest {
           assertEquals(response.getFirst().title(), book.title());
           assertEquals(response.getFirst().authors(), book.authors());
           assertEquals(response.getFirst().languages(), book.languages());
+          assertEquals(response.getFirst().downloadCount(), book.downloadCount());
         }
 
         @Test

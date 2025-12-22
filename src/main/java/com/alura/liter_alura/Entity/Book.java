@@ -35,8 +35,8 @@ public class Book {
     @Column(name = "languages")
     private List<Language> languages;
 
-    @Column(name = "quantity_downloads")
-    private Double quantityDownloads;
+    @Column(name = "download_count")
+    private Double download_count;
 
     public int getId() {
         return id;
@@ -54,7 +54,7 @@ public class Book {
         return languages;
     }
 
-    public Double getQuantityDownloads() {
-        return quantityDownloads;
+    public Double getDownloadCount() {
+        return download_count;
     }
 }
