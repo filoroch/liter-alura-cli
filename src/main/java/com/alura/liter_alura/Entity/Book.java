@@ -37,4 +37,24 @@ public class Book {
 
     @Column(name = "quantity_downloads")
     private Double quantityDownloads;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public List<Language> getLanguages() {
+        return languages;
+    }
+
+    public Double getQuantityDownloads() {
+        return quantityDownloads;
+    }
 }

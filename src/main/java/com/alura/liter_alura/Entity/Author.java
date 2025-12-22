@@ -29,5 +29,5 @@ public class Author {
     private Year birthYear;
 
     @Column(name = "death_year")
-    private Year death_year;
+    private Year deathYear;
 }

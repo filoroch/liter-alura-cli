@@ -2,6 +2,7 @@ package com.alura.liter_alura.service;
 
 import com.alura.liter_alura.DTO.AuthorRequestDTO;
 import com.alura.liter_alura.DTO.BookRequestDTO;
+import com.alura.liter_alura.Entity.Book;
 import com.alura.liter_alura.Entity.Language;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,7 @@ import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 
+import static com.alura.liter_alura.service.BookService.toBookEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,6 +30,29 @@ class BookServiceTest {
 
     @InjectMocks
     BookService bookService;
+
+    @Nested
+    @DisplayName("Converter DTO para Entidade")
+    class ConvertDtoToEntityTests {
+
+        @Test
+        @DisplayName("Deve chamar o método convertDtoToEntity do BookService")
+        void convertDtoToEntity_ShouldCallMethod() {
+            // Arrange
+            BookRequestDTO bookRequestDTO = BookRequestDTO.builder()
+                    .title("Test Book")
+                    .authors(Collections.emptySet())
+                    .languages(Collections.emptySet())
+                    .build();
+
+            // Act
+            var entity = toBookEntity(bookRequestDTO);
+
+            assertNotNull(entity);
+            assertTrue(entity instanceof Book);
+            assertEquals(bookRequestDTO.title(), entity.getTitle());
+        }
+    }
 
     @Nested
     @DisplayName("Testando a conversão de JSON para DTOs")
