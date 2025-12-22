@@ -2,11 +2,14 @@ package com.alura.liter_alura.service;
 
 import com.alura.liter_alura.DTO.AuthorRequestDTO;
 import com.alura.liter_alura.DTO.BookRequestDTO;
+import com.alura.liter_alura.Entity.Author;
 import com.alura.liter_alura.Entity.Book;
 import com.alura.liter_alura.Entity.Language;
+import com.alura.liter_alura.Repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,16 +20,83 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
+import static com.alura.liter_alura.service.BookService.toAuthorEntity;
 import static com.alura.liter_alura.service.BookService.toBookEntity;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
 
     @InjectMocks
     BookService bookService;
+
+    @Mock
+    BookRepository bookRepository;
+
+    @Nested
+    @DisplayName("Crud Operations")
+    class CrudOperationsTest{
+
+        private BookRequestDTO b1;
+        private BookRequestDTO b2;
+
+        @BeforeEach
+        void setUp(){
+            var author = AuthorRequestDTO.builder()
+                    .name("George Orwell")
+                    .birthYear(Year.of(1903))
+                    .deathYear(Year.of(1950))
+                    .build();
+
+            b1 = BookRequestDTO.builder()
+                    .title("1984")
+                    .authors(Collections.singleton((author)))
+                    .languages(Collections.singleton(Language.ENGLISH))
+                    .downloadCount(15615.0)
+                    .build();
+
+            b2 = BookRequestDTO.builder()
+                    .title("A Revolução dos Bichos")
+                    .authors(Collections.singleton((author)))
+                    .languages(Collections.singleton(Language.ENGLISH))
+                    .downloadCount(2305.5)
+                    .build();
+        }
+
+        @Test
+        @DisplayName("Deve criar dois novos livros no banco de dados")
+        void createBook_ShouldCreateNewBookInDatabase() {
+
+            Book savedBook1 = toBookEntity(b1);
+            savedBook1.setId(1);  // Simula ID gerado pelo banco
+
+            Book savedBook2 = toBookEntity(b2);
+            savedBook2.setId(2);
+
+            when(bookRepository.save(any(Book.class)))
+                    .thenReturn(savedBook1)
+                    .thenReturn(savedBook2);
+
+            var r1 = bookService.create(b1);
+            var r2 = bookService.create(b2);
+
+            assertThat(r1).isNotNull();
+            assertThat(r2).isNotNull();
+            assertThat(r1.getTitle()).isEqualTo("1984");
+            assertThat(r2.getTitle()).isEqualTo("A Revolução dos Bichos");
+            assertThat(r1.getId()).isEqualTo(1L);
+            assertThat(r2.getId()).isEqualTo(2L);
+
+            verify(bookRepository, times(2)).save(any(Book.class));
+        }
+    }
 
     @Nested
     @DisplayName("Converter DTO para Entidade")
