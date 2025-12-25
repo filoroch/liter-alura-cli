@@ -6,8 +6,8 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-        ddl-auto: update
-    show-sql: true
+        ddl-auto: none # serve para desenvolvimento, em produção usar 'validate' ou 'none'
+    show-sql: false
   main:
     banner:
       location: classpath:banner.txt

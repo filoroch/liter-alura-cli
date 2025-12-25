@@ -25,17 +25,13 @@ public class Book {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToMany
-    @JoinTable(
-        name = "book_authors",
-        joinColumns = @JoinColumn(name = "book_id"),
-        inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
-    private Set<Author> authors = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "languages")
-    private List<Language> languages;
+    private Language languages;
 
     @Column(name = "download_count")
     private Double download_count;
@@ -48,15 +44,21 @@ public class Book {
         return title;
     }
 
-    public Set<Author> getAuthors() {
-        return authors;
+    public Author getAuthor() {
+        return author;
     }
 
-    public List<Language> getLanguages() {
+    public Language getLanguages() {
         return languages;
     }
 
     public Double getDownloadCount() {
         return download_count;
+    }
+
+    @Override
+    public String toString() {
+        // " title: 'The Great Book', author: 'John Doe', languages: 'EN', download_count: 1234.0
+        return " title: '" + title + ", author: " + author.getName() + ", languages: " + languages + ", download_count: " + download_count;
     }
 }

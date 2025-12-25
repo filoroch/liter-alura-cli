@@ -2,14 +2,12 @@ package com.alura.liter_alura.service;
 
 import com.alura.liter_alura.DTO.AuthorRequestDTO;
 import com.alura.liter_alura.DTO.BookRequestDTO;
-import com.alura.liter_alura.Entity.Author;
 import com.alura.liter_alura.Entity.Book;
 import com.alura.liter_alura.Entity.Language;
 import com.alura.liter_alura.Repository.BookRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,12 +18,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
-import static com.alura.liter_alura.service.BookService.toAuthorEntity;
 import static com.alura.liter_alura.service.BookService.toBookEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

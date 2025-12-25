@@ -4,7 +4,10 @@ import com.alura.liter_alura.DTO.AuthorRequestDTO;
 import com.alura.liter_alura.DTO.BookRequestDTO;
 import com.alura.liter_alura.Entity.Author;
 import com.alura.liter_alura.Entity.Book;
+import com.alura.liter_alura.Entity.Language;
+import com.alura.liter_alura.Repository.AuthorRepository;
 import com.alura.liter_alura.Repository.BookRepository;
+import com.alura.liter_alura.exceptions.BookNotFound;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,53 +24,74 @@ public class BookService {
 
     private final ObjectMapper mapper;
     private BookRepository bookRepository;
+    private AuthorService authorService;
 
-    public BookService(BookRepository bookRepository) {
+    public BookService(
+            BookRepository bookRepository,
+            AuthorService authorService
+    ) {
+        this.authorService = authorService;
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
         this.bookRepository = bookRepository;
     }
 
     public Book create (BookRequestDTO dto) {
+        /// Verificar se os livros ja existem
         var book = toBookEntity(dto);
-        return bookRepository.save(book);
+        var bookExists = bookRepository.findByTitle(book.getTitle());
+
+        if (bookExists != null){
+            return bookExists.getFirst();
+        }
+
+        /// Verificar se um autor existe e retorna-lo
+        var author = book.getAuthor();
+
+        if (author != null){
+            var authorExists = authorService.upsert(dto.authors().stream().findFirst().get());
+
+            if (authorExists != null){
+                book.setAuthor(authorExists);
+            }
+        }
+
+        return bookRepository.saveAndFlush(book);
     }
 
-    static Author toAuthorEntity(AuthorRequestDTO dto) {
-        return Author.builder()
-                .name(dto.name())
-                .birthYear(dto.birthYear())
-                .deathYear(dto.deathYear())
-                .build();
+    public List<Book> getAll() {
+        return bookRepository.findAll();
     }
 
-    static Book toBookEntity(BookRequestDTO dto) {
+    public static Book toBookEntity(BookRequestDTO dto) {
         var authors = dto.authors().stream()
-                .map(BookService::toAuthorEntity)
+                .map(AuthorService::toAuthorEntity)
                 .collect(Collectors.toSet());
 
         return Book.builder()
                 .title(dto.title())
-                .authors(authors)
-                .languages(dto.languages().stream().toList())
+                .author(authors.stream().findFirst().get())
+                .languages(dto.languages().stream().findFirst().get())
+                .download_count(dto.downloadCount())
                 .build();
     }
 
-    protected List<BookRequestDTO> convertJsonToDTOs(String json) throws JsonProcessingException {
+    public List<BookRequestDTO> convertJsonToDTOs(String json) throws JsonProcessingException {
         var root = mapper.readTree(json);
         var countNode = root.get("count");
 
-        if (countNode == null || countNode.asInt() == 0) {
-            throw new RuntimeException("Não foram encontrados livros com os critérios informados.");
-        }
+        if (countNode == null || countNode.asInt() == 0) throw new BookNotFound("Não foram encontrados livros com os critérios informados.");
 
         var resultsNode = root.get("results");
-
-        if (resultsNode == null || !resultsNode.isArray()) {
-            throw new RuntimeException("Formato de resposta inesperado da API de livros.");
-        }
+        if (resultsNode == null || !resultsNode.isArray()) throw new RuntimeException("Formato de resposta inesperado da API de livros.");
 
         return mapper.convertValue(resultsNode, new TypeReference<List<BookRequestDTO>>() {});
+    }
+
+    public List<Book> getBooksByLanguage(Language language) {
+        var books = bookRepository.findByLanguages(language);
+        if (books.isEmpty()) throw new BookNotFound("Nenhum livro encontrado para o idioma: " + language);
+        return books;
     }
 }
 

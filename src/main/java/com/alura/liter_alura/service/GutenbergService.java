@@ -18,7 +18,7 @@ public class GutenbergService {
     private static final String BASE_URL = "http://gutendex.com/books";
 
     public GutenbergService(HttpClient client) {
-        this.client = client.newBuilder().build();
+        this.client = client;
     }
 
     private HttpResponse<String> makeRequest(String url) {
