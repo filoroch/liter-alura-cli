@@ -1,0 +1,15 @@
+
+
+'    ██╗     ██╗████████╗███████╗██████╗      █████╗ ██╗     ██╗   ██╗██████╗  █████╗
+'    ██║     ██║╚══██╔══╝██╔════╝██╔══██╗    ██╔══██╗██║     ██║   ██║██╔══██╗██╔══██╗
+'    ██║     ██║   ██║   █████╗  ██████╔╝    ███████║██║     ██║   ██║██████╔╝███████║
+'    ██║     ██║   ██║   ██╔══╝  ██╔══██╗    ██╔══██║██║     ██║   ██║██╔══██╗██╔══██║
+'    ███████╗██║   ██║   ███████╗██║  ██║    ██║  ██║███████╗╚██████╔╝██║  ██║██║  ██║
+'    ╚══════╝╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+'             [ Projeto de Consulta e Consumo de APIs da Alura com a Oracle]
+
+            Esse projeto foi desenvolvido como parte das entregas do Oracle ONE
+                junto com a Alura Latam na formação backend Java com Spring
+
+                Digite "Sair" para fechar o programa a qualquer momento.
+
